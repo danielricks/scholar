@@ -9,6 +9,7 @@ class Scholar:
 	# Initializes the class
 	def __init__(self):
 		self.number_of_results = 20
+		self.number_analogy_results = 3
 		desired_vocab = self.load_desired_vocab('des_words_wiki1000.txt')
 		self.canonical_pairs_filename = 'canon.txt'
 		self.load_word2vec('wikipedia_articles_tagged.bin', desired_vocab)
@@ -53,7 +54,7 @@ class Scholar:
 
 	# Returns the results of entering a list of positive and negative words into word2vec
 	def get_results_for_words(self, positives, negatives):
-		indexes, metrics = self.model.analogy(pos=positives, neg=negatives, n=self.number_of_results)
+		indexes, metrics = self.model.analogy(pos=positives, neg=negatives, n=self.number_analogy_results)
 		results = self.model.generate_response(indexes, metrics).tolist()
 		return self.format_output(results)
 
@@ -94,11 +95,4 @@ class Scholar:
 					final_results.append(key)
 			current_max -= 1
 		return final_results
-'''
-ze_word = sys.argv[1]
-
-s = Scholar()
-print s.get_verbs(ze_word)'''
-#print s.get_cosine_similarity('man', 'woman')
-#print s.analogy('king -man woman')
 
