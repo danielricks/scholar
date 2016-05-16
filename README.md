@@ -11,10 +11,9 @@ You will need a Word2Vec .bin file.
 
 There are currently only a couple methods available. They are demonstrated below.
 
-'''python
+```python
 s = Scholar()
 print s.get_verbs('mailbox')
 print s.get_cosine_similarity('man', 'woman')
 print s.analogy('king -man woman')
-'''
-
+```
