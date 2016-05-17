@@ -72,7 +72,7 @@ class Scholar:
 		# Run analogy on the word versus canonical pairs
 		for line in canonical_pairs:
 			words = line.split()
-			query_string = words[0] + '_VB -' + words[1] + '_NN ' + noun + '_NN'
+			query_string = words[0] + '_VB -' + words[1] + '_NN ' + noun
 			verb_list = self.analogy(query_string)
 			# For every verb returned...
 			for verb in verb_list:
