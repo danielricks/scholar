@@ -13,7 +13,7 @@ There are currently only a couple methods available. They are demonstrated below
 
 ```python
 s = Scholar()
-print s.get_verbs('mailbox')
+print s.get_verbs('mailbox_NN')
 print s.get_cosine_similarity('man', 'woman')
 print s.analogy('king -man woman')
 ```
