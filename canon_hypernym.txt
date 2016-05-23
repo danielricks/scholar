@@ -1,0 +1,11 @@
+animal dog
+book bible
+bird eagle
+fruit apple
+color green
+instrument piano
+flower daisy
+grain wheat
+meat beef
+building house
+weapon gun
