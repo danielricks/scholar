@@ -5,15 +5,20 @@ It is intended to be used with [textplayer](https://github.com/kingjamesiv/textp
 
 ## Requirements
 
-You will need a Word2Vec .bin file.
+You will need a Word2Vec .bin file. Remember that if you are using a POS-tagged .bin file, you need to append '_NN', etc. onto all your words.
 
 ## Usage
 
 There are currently only a couple methods available. They are demonstrated below.
 
 ```python
-s = Scholar()
-print s.get_verbs('mailbox_NN')
+import scholar.scholar as sch
+s = sch.Scholar()
+print s.get_verbs('mailbox')
+print s.get_adjectives('mailbox')
+print s.get_hypernyms('tree')
+print s.get_hyponyms('weapon')
+print s.get_meronyms('house')
 print s.get_cosine_similarity('man', 'woman')
 print s.analogy('king -man woman')
 ```
