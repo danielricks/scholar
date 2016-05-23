@@ -3,3 +3,4 @@
 gensim_tagged
 *.npy
 *.bin
+*.txt~
