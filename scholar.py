@@ -10,7 +10,7 @@ class Scholar:
 	def __init__(self):
 		self.number_of_results = 10
 		self.number_analogy_results = 20
-		desired_vocab = self.load_desired_vocab('scholar/des_words_wiki1000.txt')
+		desired_vocab = self.load_desired_vocab('scholar/des_words_wiki_parsey_100.txt')
 		self.load_word2vec('scholar/wikipedia_articles_parsey.bin', desired_vocab)
 
 	# Return a list of words from a file
@@ -23,7 +23,7 @@ class Scholar:
 
 	# Loads the word2vec model from a specified file
 	def load_word2vec(self, model_filename, des_vocab):
-		self.model = word2vec.load(model_filename)#, desired_vocab=des_vocab)
+		self.model = word2vec.load(model_filename), desired_vocab=des_vocab)
 
 	# Return the cosine similarity of vectors for two specified words
 	def get_cosine_similarity(self, word1, word2):
