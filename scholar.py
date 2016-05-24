@@ -95,12 +95,13 @@ class Scholar:
 	def get_hyponyms(self, noun):
 		return self.get_canonical_results(noun, 'HYPO', 'scholar/canon_hypernym.txt')
 
-	# Returns the canonical results for meronyms (parts of the given noun)
-	def get_meronyms(self, noun):
-		return self.get_canonical_results(noun, 'MERO1', 'scholar/canon_meronym.txt') # gives you parts of the noun
+	# Returns the canonical results for parts of the given noun
+	def get_parts(self, noun):
+		return self.get_canonical_results(noun, 'PARTS', 'scholar/canon_meronym.txt')
 
-	def get_meronyms2(self, noun):
-		return self.get_canonical_results(noun, 'MERO2', 'scholar/canon_meronym.txt') # gives you what the noun is a part of
+	# Returns the canonical results for things the noun could be a part of
+	def get_whole(self, noun):
+		return self.get_canonical_results(noun, 'WHOLE', 'scholar/canon_meronym.txt')
 
 	# Returns canonical results for specified relationships between words
 	def get_canonical_results(self, noun, query_tag, canonical_tag_filename):
@@ -116,10 +117,10 @@ class Scholar:
 				query_string = words[0] + '_NN -' + words[1] + '_NN ' + noun
 			elif query_tag == 'HYPO':
 				query_string = words[1] + '_NN -' + words[0] + '_NN ' + noun
-			elif query_tag == 'MERO1':
-				query_string = '-' + words[0] + '_NN ' + words[1] + '_NN ' + noun # gives you parts of the noun
-			elif query_tag == 'MERO2':
-				query_string = '-' + words[1] + '_NN ' + words[0] + '_NN ' + noun # gives you what the noun is a part of
+			elif query_tag == 'PARTS':
+				query_string = '-' + words[0] + '_NN ' + words[1] + '_NN ' + noun
+			elif query_tag == 'WHOLE':
+				query_string = '-' + words[1] + '_NN ' + words[0] + '_NN ' + noun
 			# ...performs an analogy using the words...
 			try:
 				result_list = self.analogy(query_string)
@@ -182,8 +183,6 @@ class Scholar:
 			current_index += 1
 		return final_results
 
-#	def get_synonym(self, noun): # implement?
-
-#	def get_antonym(self, noun):
-
+	def get_antonyms(self, noun):
+		pass
 
