@@ -9,7 +9,7 @@ class Scholar:
 	# Initializes the class
 	def __init__(self):
 		self.number_of_results = 10
-		self.number_analogy_results = 10
+		self.number_analogy_results = 20
 		desired_vocab = self.load_desired_vocab('scholar/des_words_wiki1000.txt')
 		self.load_word2vec('scholar/wikipedia_articles_parsey.bin', desired_vocab)
 
@@ -121,7 +121,10 @@ class Scholar:
 			elif query_tag == 'MERO2':
 				query_string = '-' + words[1] + '_NN ' + words[0] + '_NN ' + noun # gives you what the noun is a part of
 			# ...performs an analogy using the words...
-			result_list = self.analogy(query_string)
+			try:
+				result_list = self.analogy(query_string)
+			except:
+				result_list = []
 			# ...and adds those results to a map (sorting depending on popularity, Poll method)
 			for result in result_list:
 				if result_map.has_key(result):
