@@ -1,7 +1,23 @@
 import word2vec, sys, os
 import numpy as np
 
-''' This uses des_words.txt and canon.txt
+''' Files used by this class:
+		canon_adj.txt
+		canon_hypernym.txt
+		canon_meronym.txt
+		canon_verbs.txt
+		des_words_wiki_parsey_100.txt
+		wikipedia_articles_parsey.bin
+
+Class Summary: Scholar()
+Methods:	get_verbs([singular noun])
+ 			get_adjectives([singular noun])
+			get_hypernyms([singular noun])
+			get_hyponyms([singular noun])
+			get_parts([singular noun])
+			get_whole([singular noun])
+ 			get_cosine_similarity([singular noun], [singular noun])
+			get_analogy([string consisting of words separated by spaces, with '-' preceding at least one word])
 '''
 
 class Scholar:
@@ -10,8 +26,8 @@ class Scholar:
 	def __init__(self):
 		self.number_of_results = 10
 		self.number_analogy_results = 20
-		desired_vocab = self.load_desired_vocab('scholar/des_words_wiki_parsey_100.txt')
-		self.load_word2vec('scholar/wikipedia_articles_parsey.bin', desired_vocab)
+#		desired_vocab = self.load_desired_vocab('scholar/des_words_wiki_parsey_100.txt')
+		self.load_word2vec('scholar/wikipedia_articles_parsey.bin')
 
 	# Return a list of words from a file
 	def load_desired_vocab(self, filename):
@@ -22,8 +38,8 @@ class Scholar:
 		return word_list
 
 	# Loads the word2vec model from a specified file
-	def load_word2vec(self, model_filename, des_vocab):
-		self.model = word2vec.load(model_filename), desired_vocab=des_vocab)
+	def load_word2vec(self, model_filename):
+		self.model = word2vec.load(model_filename)
 
 	# Return the cosine similarity of vectors for two specified words
 	def get_cosine_similarity(self, word1, word2):
