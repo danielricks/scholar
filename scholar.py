@@ -11,7 +11,7 @@ class Scholar:
 		self.number_of_results = 10
 		self.number_analogy_results = 10
 		desired_vocab = self.load_desired_vocab('scholar/des_words_wiki1000.txt')
-		self.load_word2vec('scholar/wikipedia_articles_tagged.bin', desired_vocab)
+		self.load_word2vec('scholar/wikipedia_articles_tagged_parsey.bin', desired_vocab)
 
 	# Return a list of words from a file
 	def load_desired_vocab(self, filename):
