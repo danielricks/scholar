@@ -55,11 +55,6 @@ class Scholar:
 		positives, negatives = self.get_positives_and_negatives(words_string.split())
 		return self.get_results_for_words(positives, negatives)
 
-	# Return the analogy results for a list of words (input: "king -man woman")
-	def analogy_2(self, words_string):
-		positives, negatives = self.get_positives_and_negatives(words_string.split())
-		return self.get_results_for_words_2(positives, negatives)
-
 	# Takes a list of words (ie 'king woman -man') and separates them into two lists (ie '["king", "woman"], ["man"]')
 	def get_positives_and_negatives(self, words):
 		positives = []
@@ -77,16 +72,6 @@ class Scholar:
 		indexes, metrics = self.model.analogy(pos=positives, neg=negatives, n=self.number_analogy_results)
 		results = self.model.generate_response(indexes, metrics).tolist()
 		return self.format_output(results)
-
-	# Returns the results of entering a list of positive and negative words into word2vec
-	def get_results_for_words_2(self, positives, negatives):
-		indexes, metrics = self.model.analogy(pos=positives, neg=negatives, n=self.number_analogy_results)
-		results = self.model.generate_response(indexes, metrics).tolist()
-		word_tags = []
-		for word_value in results:
-			new_tuple = ( str(word_value[0]), word_value[1] )
-			word_tags.append(new_tuple)
-		return word_tags
 
 	# Changes the output from a list of tuples (u'man', 0.816015154188), ... to a list of single words
 	def format_output(self, output):
@@ -159,8 +144,26 @@ class Scholar:
 					# ...add it to the list. (This is so that the results are sorted to the list in order of popularity)
 					final_results.append(key)
 			current_max -= 1
+		if len(final_results) > self.number_analogy_results:
+			return final_results[0:self.number_analogy_results]
 		return final_results
 
+#----------------------Highest Score Method----------------------
+
+	# Return the analogy results for a list of words (input: "king -man woman")
+	def analogy_2(self, words_string):
+		positives, negatives = self.get_positives_and_negatives(words_string.split())
+		return self.get_results_for_words_2(positives, negatives)
+
+	# Returns the results of entering a list of positive and negative words into word2vec
+	def get_results_for_words_2(self, positives, negatives):
+		indexes, metrics = self.model.analogy(pos=positives, neg=negatives, n=self.number_analogy_results)
+		results = self.model.generate_response(indexes, metrics).tolist()
+		word_tags = []
+		for word_value in results:
+			new_tuple = ( str(word_value[0]), word_value[1] )
+			word_tags.append(new_tuple)
+		return word_tags
 
 	# Separate out from verb and adjective options, provide filename for canonical pairs
 	def get_related_words_2(self, noun, query_tag):
@@ -200,5 +203,5 @@ class Scholar:
 		return final_results
 
 	def get_antonyms(self, noun):
-		pass
+		return None
 

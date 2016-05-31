@@ -9,7 +9,6 @@ give gift
 attack enemy
 say word
 open door
-avoid danger
 climb tree
 heal wound
 cure disease
