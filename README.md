@@ -5,11 +5,13 @@ It is intended to be used with [textplayer](https://github.com/kingjamesiv/textp
 
 ## Requirements
 
-You will need a Word2Vec .bin file. Remember that if you are using a POS-tagged .bin file, you need to append '_NN', etc. onto all your words.
+You will need a Word2Vec .bin file.
 
 ## Usage
 
 There are currently only a couple methods available. They are demonstrated below.
+
+Remember that if you are using a POS-tagged .bin file, you need to append '_NN', etc. onto all your words.
 
 ```python
 import scholar.scholar as sch
