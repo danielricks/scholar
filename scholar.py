@@ -27,6 +27,7 @@ class Scholar:
 		self.number_of_results = 10
 		self.number_analogy_results = 20
 #		desired_vocab = self.load_desired_vocab('scholar/des_words_wiki_parsey_100.txt')
+		self.autoAddNounTags = False
 		self.load_word2vec('scholar/wikipedia_articles_parsey.bin')
 
 	# Return a list of words from a file
@@ -82,46 +83,84 @@ class Scholar:
 
 	# Returns the canonical results for verbs
 	def get_verbs(self, noun):
-		return self.get_canonical_results(noun, 'VB', 'scholar/canon_verbs.txt')
+		return self.get_canonical_results(noun, 'VB', 'scholar/canon_verbs.txt', False)
 
 	# Returns the canonical results for adjectives
 	def get_adjectives(self, noun):
-		return self.get_canonical_results(noun, 'JJ', 'scholar/canon_adj.txt')
+		return self.get_canonical_results(noun, 'JJ', 'scholar/canon_adj.txt', False)
 
 	# Returns the canonical results for hypernyms (generalized words)
 	def get_hypernyms(self, noun):
-		return self.get_canonical_results(noun, 'HYPER', 'scholar/canon_hypernym.txt')
+		return self.get_canonical_results(noun, 'HYPER', 'scholar/canon_hypernym.txt', False)
 
 	# Returns the canonical results for hyponyms (specific words)
 	def get_hyponyms(self, noun):
-		return self.get_canonical_results(noun, 'HYPO', 'scholar/canon_hypernym.txt')
+		return self.get_canonical_results(noun, 'HYPO', 'scholar/canon_hypernym.txt', False)
 
 	# Returns the canonical results for parts of the given noun
 	def get_parts(self, noun):
-		return self.get_canonical_results(noun, 'PARTS', 'scholar/canon_meronym.txt')
+		return self.get_canonical_results(noun, 'PARTS', 'scholar/canon_meronym.txt', False)
 
 	# Returns the canonical results for things the noun could be a part of
 	def get_whole(self, noun):
-		return self.get_canonical_results(noun, 'WHOLE', 'scholar/canon_meronym.txt')
+		return self.get_canonical_results(noun, 'WHOLE', 'scholar/canon_meronym.txt', False)
+
+	# Returns the canonical results for verbs (plural)
+	def get_verbs_plural(self, noun):
+		return self.get_canonical_results(noun, 'VB', 'scholar/canon_verbs_pl.txt', True)
+
+	# Returns the canonical results for adjectives (plural)
+	def get_adjectives_plural(self, noun):
+		return self.get_canonical_results(noun, 'JJ', 'scholar/canon_adj_pl.txt', True)
+
+	# Returns the canonical results for hypernyms (generalized words) (plural)
+	def get_hypernyms_plural(self, noun):
+		return self.get_canonical_results(noun, 'HYPER', 'scholar/canon_hypernym_pl.txt', True)
+
+	# Returns the canonical results for hyponyms (specific words) (plural)
+	def get_hyponyms_plural(self, noun):
+		return self.get_canonical_results(noun, 'HYPO', 'scholar/canon_hypernym_pl.txt', True)
+
+	# Returns the canonical results for parts of the given noun (plural)
+	def get_parts_plural(self, noun):
+		return self.get_canonical_results(noun, 'PARTS', 'scholar/canon_meronym_pl.txt', True)
+
+	# Returns the canonical results for things the noun could be a part of (plural)
+	def get_whole_plural(self, noun):
+		return self.get_canonical_results(noun, 'WHOLE', 'scholar/canon_meronym_pl.txt', True)
 
 	# Returns canonical results for specified relationships between words
-	def get_canonical_results(self, noun, query_tag, canonical_tag_filename):
+	def get_canonical_results(self, noun, query_tag, canonical_tag_filename, plural):
+		if self.autoAddNounTags:
+			noun += '_NNS' if plural else '_NN'
 		canonical_pairs = open(canonical_tag_filename)
 		result_map = {}
 		# For every line in the file of canonical pairs...
 		for line in canonical_pairs:
 			# ...split into separate words...
 			words = line.split()
-			if query_tag == 'VB' or query_tag == 'JJ':
-				query_string = words[0] + '_' + query_tag + ' -' + words[1] + '_NN ' + noun
-			elif query_tag == 'HYPER':
-				query_string = words[0] + '_NN -' + words[1] + '_NN ' + noun
-			elif query_tag == 'HYPO':
-				query_string = words[1] + '_NN -' + words[0] + '_NN ' + noun
-			elif query_tag == 'PARTS':
-				query_string = '-' + words[0] + '_NN ' + words[1] + '_NN ' + noun
-			elif query_tag == 'WHOLE':
-				query_string = '-' + words[1] + '_NN ' + words[0] + '_NN ' + noun
+			if plural:
+				if query_tag == 'VB' or query_tag == 'JJ':
+					query_string = words[0] + '_' + query_tag + ' -' + words[1] + '_NNS ' + noun
+				elif query_tag == 'HYPER':
+					query_string = words[0] + '_NNS -' + words[1] + '_NNS ' + noun
+				elif query_tag == 'HYPO':
+					query_string = words[1] + '_NNS -' + words[0] + '_NNS ' + noun
+				elif query_tag == 'PARTS':
+					query_string = '-' + words[0] + '_NNS ' + words[1] + '_NNS ' + noun
+				elif query_tag == 'WHOLE':
+					query_string = '-' + words[1] + '_NNS ' + words[0] + '_NNS ' + noun
+			else:
+				if query_tag == 'VB' or query_tag == 'JJ':
+					query_string = words[0] + '_' + query_tag + ' -' + words[1] + '_NN ' + noun
+				elif query_tag == 'HYPER':
+					query_string = words[0] + '_NN -' + words[1] + '_NN ' + noun
+				elif query_tag == 'HYPO':
+					query_string = words[1] + '_NN -' + words[0] + '_NN ' + noun
+				elif query_tag == 'PARTS':
+					query_string = '-' + words[0] + '_NN ' + words[1] + '_NN ' + noun
+				elif query_tag == 'WHOLE':
+					query_string = '-' + words[1] + '_NN ' + words[0] + '_NN ' + noun
 			# ...performs an analogy using the words...
 			try:
 				result_list = self.analogy(query_string)
