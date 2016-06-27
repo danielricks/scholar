@@ -1,4 +1,4 @@
-import word2vec, sys, os
+import word2vec, sys, os, math
 import numpy as np
 
 ''' Files used by this class:
@@ -80,6 +80,40 @@ class Scholar:
 		for word_value in output:
 			words.append(str(word_value[0]))
 		return words
+
+	# Returns a list of the words in a tagged sentence ordered by salience (as determined by Word2Vec)
+	def get_words_by_salience(self, sentence):
+		sentence = sentence.split()
+		word_vectors = []
+		# Get the vectors for every word in the sentence
+		for tagged_word in sentence:
+			word_vectors.append(self.model[tagged_word])
+		word_salience = {}
+		# For every word in the sentence...
+		for word_index in xrange( len(sentence) ):
+			total_vector = np.array([0.0] * 100)
+			# Add up the vectors for every other word in the sentence...
+			for vector_index in xrange( len(word_vectors) ): 
+				if word_index != vector_index:
+					total_vector += word_vectors[vector_index]
+			# Find the average for those vectors
+			average_vector = total_vector / float( len(word_vectors) - 1 )
+			# Take the difference of the average vector and the current word vector
+			difference_list = ( average_vector - word_vectors[word_index] ).tolist()
+			difference_scalar = 0
+			# For every scalar in the difference vector...
+			for difference_number in difference_list:
+				# Add that squared number to a single scalar
+				difference_scalar += math.pow(difference_number, 2)
+			# The square root of that single scalar is the key in a dictionary
+			word_salience[ math.sqrt(difference_scalar) ] = sentence[word_index]
+		words_sorted_by_salience = []
+		# Add words in order of lowest salience to highest
+		for key in sorted(word_salience.iterkeys()):
+			words_sorted_by_salience.append(word_salience[key])
+		# Reverse the list
+		words_sorted_by_salience.reverse()
+		return words_sorted_by_salience
 
 	# Returns the canonical results for verbs
 	def get_verbs(self, noun):
