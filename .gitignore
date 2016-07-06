@@ -4,3 +4,4 @@ gensim_tagged
 *.npy
 *.bin
 *.txt~
+enwiki_dist_parsey.txt
