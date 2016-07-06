@@ -6,7 +6,6 @@ import numpy as np
 		canon_hypernym.txt
 		canon_meronym.txt
 		canon_verbs.txt
-		des_words_wiki_parsey_100.txt
 		wikipedia_articles_parsey.bin
 
 Class Summary: Scholar()
@@ -26,7 +25,6 @@ class Scholar:
 	def __init__(self):
 		self.number_of_results = 10
 		self.number_analogy_results = 20
-#		desired_vocab = self.load_desired_vocab('scholar/des_words_wiki_parsey_100.txt')
 		self.autoAddNounTags = False
 		self.load_word2vec('scholar/wikipedia_articles_parsey.bin')
 
