@@ -1,7 +1,7 @@
 # scholar
 This code provides an interface for Word2Vec in Python.
 
-It is intended to be used with [textplayer](https://github.com/kingjamesiv/textplayer).
+It is intended to be used with [autoplay](https://github.com/danielricks/autoplay).
 
 ## Requirements
 
