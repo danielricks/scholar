@@ -221,6 +221,49 @@ class Scholar:
 			return final_results[0:self.number_analogy_results]
 		return final_results
 
+	def get_most_common_words(self, pos_tag, number_of_results):
+		# This is a list of the tags as organized in the text file
+		tag_list = ['CC', 'CD', 'DT', 'EX', 'FW', 'IN', 'JJ', 'JJR', 'JJS', 'LS', 'MD', 'NN', 'NNS', 'NNP', 'NNPS', 'PDT', 'POS', 'PRP', 'PRP$', 'RB', 'RBR', 'RBS', 'RP', 'SYM', 'TO', 'UH', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'WDT', 'WP', 'WP$', 'WRB']
+
+		# If the tag doesn't exist, return nothing
+		if pos_tag not in tag_list or not os.path.exists('scholar/enwiki_dist_parsey.txt'):
+			return []
+
+		# Get the index of the specific tag requested in the list above
+		tag_index = tag_list.index(pos_tag)
+
+		# Read in the tag information for each word from the file
+		with open('scholar/enwiki_dist_parsey.txt') as f:
+			word_tag_dist = f.read()
+
+		tag_to_word = {}
+
+		# For each of the lines in the text file... (dog.0-0-0-0-0-4-0-0-90-3-0-0-etc.)
+		for line in word_tag_dist.split():
+			pieces = line.split('.')
+			word = pieces[0]
+			tags = pieces[1].split('-')
+			current_tag = int(tags[tag_index])
+			# Add to the dictionary of tag numbers to words
+			try:
+				tag_to_word[current_tag].append(word)
+			except:
+				tag_to_word[current_tag] = []
+				tag_to_word[current_tag].append(word)
+
+		common_words = []
+		taglist = tag_to_word.keys()
+		# Sort the list of tag numbers from lowest to highest
+		taglist.sort()
+		# Reverse the list (to highest to lowest)
+		taglist.reverse()
+		# Add the words for each tag number to a list
+		for tag in taglist:
+			common_words += tag_to_word[tag]
+
+		# Only return the number of results specified by the user
+		return common_words[:number_of_results]
+
 #----------------------Highest Score Method----------------------
 
 	# Return the analogy results for a list of words (input: "king -man woman")
