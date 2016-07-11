@@ -25,7 +25,7 @@ class Scholar:
 	def __init__(self):
 		self.number_of_results = 10
 		self.number_analogy_results = 20
-		self.autoAddNounTags = False
+		self.autoAddTags = True
 		self.load_word2vec('scholar/wikipedia_articles_parsey.bin')
 
 	# Return a list of words from a file
@@ -115,55 +115,66 @@ class Scholar:
 
 	# Returns the canonical results for verbs
 	def get_verbs(self, noun):
-		return self.get_canonical_results(noun, 'VB', 'scholar/canon_verbs.txt', False)
+		return self.get_canonical_results_for_nouns(noun, 'VB', 'scholar/canon_verbs.txt', False)
+
+	# Returns the canonical results for nouns
+	def get_nouns(self, verb):
+		return self.get_canonical_results_for_verbs(verb, 'scholar/canon_verbs.txt', False)
 
 	# Returns the canonical results for adjectives
 	def get_adjectives(self, noun):
-		return self.get_canonical_results(noun, 'JJ', 'scholar/canon_adj.txt', False)
+		return self.get_canonical_results_for_nouns(noun, 'JJ', 'scholar/canon_adj.txt', False)
 
 	# Returns the canonical results for hypernyms (generalized words)
 	def get_hypernyms(self, noun):
-		return self.get_canonical_results(noun, 'HYPER', 'scholar/canon_hypernym.txt', False)
+		return self.get_canonical_results_for_nouns(noun, 'HYPER', 'scholar/canon_hypernym.txt', False)
 
 	# Returns the canonical results for hyponyms (specific words)
 	def get_hyponyms(self, noun):
-		return self.get_canonical_results(noun, 'HYPO', 'scholar/canon_hypernym.txt', False)
+		return self.get_canonical_results_for_nouns(noun, 'HYPO', 'scholar/canon_hypernym.txt', False)
 
 	# Returns the canonical results for parts of the given noun
 	def get_parts(self, noun):
-		return self.get_canonical_results(noun, 'PARTS', 'scholar/canon_meronym.txt', False)
+		return self.get_canonical_results_for_nouns(noun, 'PARTS', 'scholar/canon_meronym.txt', False)
 
 	# Returns the canonical results for things the noun could be a part of
 	def get_whole(self, noun):
-		return self.get_canonical_results(noun, 'WHOLE', 'scholar/canon_meronym.txt', False)
+		return self.get_canonical_results_for_nouns(noun, 'WHOLE', 'scholar/canon_meronym.txt', False)
 
 	# Returns the canonical results for verbs (plural)
 	def get_verbs_plural(self, noun):
-		return self.get_canonical_results(noun, 'VB', 'scholar/canon_verbs_pl.txt', True)
+		return self.get_canonical_results_for_nouns(noun, 'VB', 'scholar/canon_verbs_pl.txt', True)
+
+	# Returns the canonical results for nouns (plural)
+	def get_nouns_plural(self, verb):
+		return self.get_canonical_results_for_verbs(verb, 'scholar/canon_verbs.txt', True)
 
 	# Returns the canonical results for adjectives (plural)
 	def get_adjectives_plural(self, noun):
-		return self.get_canonical_results(noun, 'JJ', 'scholar/canon_adj_pl.txt', True)
+		return self.get_canonical_results_for_nouns(noun, 'JJ', 'scholar/canon_adj_pl.txt', True)
 
 	# Returns the canonical results for hypernyms (generalized words) (plural)
 	def get_hypernyms_plural(self, noun):
-		return self.get_canonical_results(noun, 'HYPER', 'scholar/canon_hypernym_pl.txt', True)
+		return self.get_canonical_results_for_nouns(noun, 'HYPER', 'scholar/canon_hypernym_pl.txt', True)
 
 	# Returns the canonical results for hyponyms (specific words) (plural)
 	def get_hyponyms_plural(self, noun):
-		return self.get_canonical_results(noun, 'HYPO', 'scholar/canon_hypernym_pl.txt', True)
+		return self.get_canonical_results_for_nouns(noun, 'HYPO', 'scholar/canon_hypernym_pl.txt', True)
 
 	# Returns the canonical results for parts of the given noun (plural)
 	def get_parts_plural(self, noun):
-		return self.get_canonical_results(noun, 'PARTS', 'scholar/canon_meronym_pl.txt', True)
+		return self.get_canonical_results_for_nouns(noun, 'PARTS', 'scholar/canon_meronym_pl.txt', True)
 
 	# Returns the canonical results for things the noun could be a part of (plural)
 	def get_whole_plural(self, noun):
-		return self.get_canonical_results(noun, 'WHOLE', 'scholar/canon_meronym_pl.txt', True)
+		return self.get_canonical_results_for_nouns(noun, 'WHOLE', 'scholar/canon_meronym_pl.txt', True)
 
 	# Returns canonical results for specified relationships between words
-	def get_canonical_results(self, noun, query_tag, canonical_tag_filename, plural):
-		if self.autoAddNounTags:
+	# As an aside, this is simply returning the results of all the analogies from all the canonical pairs.
+	# Occasionally it returns unexpected tags (ei user requested a list of adjectives related to a noun, 
+	# and got mostly adjectives but also one preposition). Be aware of this if it matters.
+	def get_canonical_results_for_nouns(self, noun, query_tag, canonical_tag_filename, plural):
+		if self.autoAddTags:
 			noun += '_NNS' if plural else '_NN'
 		canonical_pairs = open(canonical_tag_filename)
 		result_map = {}
@@ -193,6 +204,49 @@ class Scholar:
 					query_string = '-' + words[0] + '_NN ' + words[1] + '_NN ' + noun
 				elif query_tag == 'WHOLE':
 					query_string = '-' + words[1] + '_NN ' + words[0] + '_NN ' + noun
+
+			# ...performs an analogy using the words...
+			try:
+				result_list = self.analogy(query_string)
+			except:
+				result_list = []
+			# ...and adds those results to a map (sorting depending on popularity, Poll method)
+			for result in result_list:
+				if result_map.has_key(result):
+					result_map[result] += 1
+				else:
+					result_map[result] = 1
+		final_results = []
+		current_max = self.number_of_results
+		# While we haven't reached the requested number of results and the number of possible matches is within reason...
+		while len(final_results) < self.number_of_results and current_max > 0:
+			# ...for every key in the results...
+			for key in result_map.keys():
+				# ...if the number of times a result has been seen equals the current 'number of matches'...
+				if result_map[key] == current_max:
+					# ...add it to the list. (This is so that the results are sorted to the list in order of popularity)
+					final_results.append(key)
+			current_max -= 1
+		if len(final_results) > self.number_analogy_results:
+			return final_results[0:self.number_analogy_results]
+		return final_results
+
+	# Returns canonical results for specified relationships between words
+	# As an aside, this is simply returning the results of all the analogies from all the canonical pairs.
+	# Occasionally it returns unexpected tags (ei user requested a list of adjectives related to a noun, 
+	# and got mostly adjectives but also one preposition). Be aware of this if it matters.
+	def get_canonical_results_for_verbs(self, verb, canonical_tag_filename, plural):
+		canonical_pairs = open(canonical_tag_filename)
+		result_map = {}
+		# For every line in the file of canonical pairs...
+		for line in canonical_pairs:
+			# ...split into separate words...
+			words = line.split()
+			if plural:
+				query_string = words[1] + '_NNS' + ' -' + words[0] + '_VB ' + verb + '_VB'
+			else:
+				query_string = words[1] + '_NN' + ' -' + words[0] + '_VB ' + verb + '_VB'
+
 			# ...performs an analogy using the words...
 			try:
 				result_list = self.analogy(query_string)
