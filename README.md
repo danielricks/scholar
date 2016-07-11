@@ -18,20 +18,24 @@ print s.get_cosine_similarity('man', 'woman')
 print s.analogy('king -man woman')
 
 # For singular nouns
-print s.get_verbs('mailbox')
-print s.get_adjectives('mailbox')
-print s.get_hypernyms('tree')
-print s.get_hyponyms('weapon')
-print s.get_parts('house')
-print s.get_whole('bread')
+print s.get_verbs('mailbox', 10) # Where 10 is the number of desired results
+print s.get_adjectives('mailbox', 10)
+print s.get_hypernyms('tree', 10)
+print s.get_hyponyms('weapon', 10)
+print s.get_parts('house', 10)
+print s.get_whole('bread', 10)
 
 # For plural nouns
-print s.get_verbs_plural('mailboxes')
-print s.get_adjectives_plural('mailboxes')
-print s.get_hypernyms_plural('trees')
-print s.get_hyponyms_plural('weapons')
-print s.get_parts_plural('houses')
-print s.get_whole_plural('loaves')
+print s.get_verbs_plural('mailboxes', 10)
+print s.get_adjectives_plural('mailboxes', 10)
+print s.get_hypernyms_plural('trees', 10)
+print s.get_hyponyms_plural('weapons', 10)
+print s.get_parts_plural('houses', 10)
+print s.get_whole_plural('loaves', 10)
+
+# For verbs
+print s.get_nouns('purchase', 10)
+print s.get_nouns_plural('purchase', 10)
 
 # This method takes a Penn Treebank part-of-speech tag and the number of requested results instead of a word.
 print s.get_most_common_words('VB', 10)
