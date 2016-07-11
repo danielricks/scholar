@@ -114,66 +114,66 @@ class Scholar:
 		return words_sorted_by_salience
 
 	# Returns the canonical results for verbs
-	def get_verbs(self, noun):
-		return self.get_canonical_results_for_nouns(noun, 'VB', 'scholar/canon_verbs.txt', False)
+	def get_verbs(self, noun, number_of_user_results):
+		return self.get_canonical_results_for_nouns(noun, 'VB', 'scholar/canon_verbs.txt', False, number_of_user_results)
 
 	# Returns the canonical results for nouns
-	def get_nouns(self, verb):
-		return self.get_canonical_results_for_verbs(verb, 'scholar/canon_verbs.txt', False)
+	def get_nouns(self, verb, number_of_user_results):
+		return self.get_canonical_results_for_verbs(verb, 'scholar/canon_verbs.txt', False, number_of_user_results)
 
 	# Returns the canonical results for adjectives
-	def get_adjectives(self, noun):
-		return self.get_canonical_results_for_nouns(noun, 'JJ', 'scholar/canon_adj.txt', False)
+	def get_adjectives(self, noun, number_of_user_results):
+		return self.get_canonical_results_for_nouns(noun, 'JJ', 'scholar/canon_adj.txt', False, number_of_user_results)
 
 	# Returns the canonical results for hypernyms (generalized words)
-	def get_hypernyms(self, noun):
-		return self.get_canonical_results_for_nouns(noun, 'HYPER', 'scholar/canon_hypernym.txt', False)
+	def get_hypernyms(self, noun, number_of_user_results):
+		return self.get_canonical_results_for_nouns(noun, 'HYPER', 'scholar/canon_hypernym.txt', False, number_of_user_results)
 
 	# Returns the canonical results for hyponyms (specific words)
-	def get_hyponyms(self, noun):
-		return self.get_canonical_results_for_nouns(noun, 'HYPO', 'scholar/canon_hypernym.txt', False)
+	def get_hyponyms(self, noun, number_of_user_results):
+		return self.get_canonical_results_for_nouns(noun, 'HYPO', 'scholar/canon_hypernym.txt', False, number_of_user_results)
 
 	# Returns the canonical results for parts of the given noun
-	def get_parts(self, noun):
-		return self.get_canonical_results_for_nouns(noun, 'PARTS', 'scholar/canon_meronym.txt', False)
+	def get_parts(self, noun, number_of_user_results):
+		return self.get_canonical_results_for_nouns(noun, 'PARTS', 'scholar/canon_meronym.txt', False, number_of_user_results)
 
 	# Returns the canonical results for things the noun could be a part of
-	def get_whole(self, noun):
-		return self.get_canonical_results_for_nouns(noun, 'WHOLE', 'scholar/canon_meronym.txt', False)
+	def get_whole(self, noun, number_of_user_results):
+		return self.get_canonical_results_for_nouns(noun, 'WHOLE', 'scholar/canon_meronym.txt', False, number_of_user_results)
 
 	# Returns the canonical results for verbs (plural)
-	def get_verbs_plural(self, noun):
-		return self.get_canonical_results_for_nouns(noun, 'VB', 'scholar/canon_verbs_pl.txt', True)
+	def get_verbs_plural(self, noun, number_of_user_results):
+		return self.get_canonical_results_for_nouns(noun, 'VB', 'scholar/canon_verbs_pl.txt', True, number_of_user_results)
 
 	# Returns the canonical results for nouns (plural)
-	def get_nouns_plural(self, verb):
-		return self.get_canonical_results_for_verbs(verb, 'scholar/canon_verbs.txt', True)
+	def get_nouns_plural(self, verb, number_of_user_results):
+		return self.get_canonical_results_for_verbs(verb, 'scholar/canon_verbs.txt', True, number_of_user_results)
 
 	# Returns the canonical results for adjectives (plural)
-	def get_adjectives_plural(self, noun):
-		return self.get_canonical_results_for_nouns(noun, 'JJ', 'scholar/canon_adj_pl.txt', True)
+	def get_adjectives_plural(self, noun, number_of_user_results):
+		return self.get_canonical_results_for_nouns(noun, 'JJ', 'scholar/canon_adj_pl.txt', True, number_of_user_results)
 
 	# Returns the canonical results for hypernyms (generalized words) (plural)
-	def get_hypernyms_plural(self, noun):
-		return self.get_canonical_results_for_nouns(noun, 'HYPER', 'scholar/canon_hypernym_pl.txt', True)
+	def get_hypernyms_plural(self, noun, number_of_user_results):
+		return self.get_canonical_results_for_nouns(noun, 'HYPER', 'scholar/canon_hypernym_pl.txt', True, number_of_user_results)
 
 	# Returns the canonical results for hyponyms (specific words) (plural)
-	def get_hyponyms_plural(self, noun):
-		return self.get_canonical_results_for_nouns(noun, 'HYPO', 'scholar/canon_hypernym_pl.txt', True)
+	def get_hyponyms_plural(self, noun, number_of_user_results):
+		return self.get_canonical_results_for_nouns(noun, 'HYPO', 'scholar/canon_hypernym_pl.txt', True, number_of_user_results)
 
 	# Returns the canonical results for parts of the given noun (plural)
-	def get_parts_plural(self, noun):
-		return self.get_canonical_results_for_nouns(noun, 'PARTS', 'scholar/canon_meronym_pl.txt', True)
+	def get_parts_plural(self, noun, number_of_user_results):
+		return self.get_canonical_results_for_nouns(noun, 'PARTS', 'scholar/canon_meronym_pl.txt', True, number_of_user_results)
 
 	# Returns the canonical results for things the noun could be a part of (plural)
-	def get_whole_plural(self, noun):
-		return self.get_canonical_results_for_nouns(noun, 'WHOLE', 'scholar/canon_meronym_pl.txt', True)
+	def get_whole_plural(self, noun, number_of_user_results):
+		return self.get_canonical_results_for_nouns(noun, 'WHOLE', 'scholar/canon_meronym_pl.txt', True, number_of_user_results)
 
 	# Returns canonical results for specified relationships between words
 	# As an aside, this is simply returning the results of all the analogies from all the canonical pairs.
 	# Occasionally it returns unexpected tags (ei user requested a list of adjectives related to a noun, 
 	# and got mostly adjectives but also one preposition). Be aware of this if it matters.
-	def get_canonical_results_for_nouns(self, noun, query_tag, canonical_tag_filename, plural):
+	def get_canonical_results_for_nouns(self, noun, query_tag, canonical_tag_filename, plural, number_of_user_results):
 		if self.autoAddTags:
 			noun += '_NNS' if plural else '_NN'
 		canonical_pairs = open(canonical_tag_filename)
@@ -217,9 +217,9 @@ class Scholar:
 				else:
 					result_map[result] = 1
 		final_results = []
-		current_max = self.number_of_results
+		current_max = number_of_user_results
 		# While we haven't reached the requested number of results and the number of possible matches is within reason...
-		while len(final_results) < self.number_of_results and current_max > 0:
+		while len(final_results) < number_of_user_results and current_max > 0:
 			# ...for every key in the results...
 			for key in result_map.keys():
 				# ...if the number of times a result has been seen equals the current 'number of matches'...
@@ -227,15 +227,15 @@ class Scholar:
 					# ...add it to the list. (This is so that the results are sorted to the list in order of popularity)
 					final_results.append(key)
 			current_max -= 1
-		if len(final_results) > self.number_analogy_results:
-			return final_results[0:self.number_analogy_results]
+		if len(final_results) >= number_of_user_results:
+			return final_results[0:number_of_user_results]
 		return final_results
 
 	# Returns canonical results for specified relationships between words
 	# As an aside, this is simply returning the results of all the analogies from all the canonical pairs.
 	# Occasionally it returns unexpected tags (ei user requested a list of adjectives related to a noun, 
 	# and got mostly adjectives but also one preposition). Be aware of this if it matters.
-	def get_canonical_results_for_verbs(self, verb, canonical_tag_filename, plural):
+	def get_canonical_results_for_verbs(self, verb, canonical_tag_filename, plural, number_of_user_results):
 		canonical_pairs = open(canonical_tag_filename)
 		result_map = {}
 		# For every line in the file of canonical pairs...
@@ -259,9 +259,9 @@ class Scholar:
 				else:
 					result_map[result] = 1
 		final_results = []
-		current_max = self.number_of_results
+		current_max = number_of_user_results
 		# While we haven't reached the requested number of results and the number of possible matches is within reason...
-		while len(final_results) < self.number_of_results and current_max > 0:
+		while len(final_results) < number_of_user_results and current_max > 0:
 			# ...for every key in the results...
 			for key in result_map.keys():
 				# ...if the number of times a result has been seen equals the current 'number of matches'...
@@ -269,8 +269,8 @@ class Scholar:
 					# ...add it to the list. (This is so that the results are sorted to the list in order of popularity)
 					final_results.append(key)
 			current_max -= 1
-		if len(final_results) > self.number_analogy_results:
-			return final_results[0:self.number_analogy_results]
+		if len(final_results) >= number_of_user_results:
+			return final_results[0:number_of_user_results]
 		return final_results
 
 	def get_most_common_words(self, pos_tag, number_of_results):
