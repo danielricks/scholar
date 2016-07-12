@@ -37,6 +37,7 @@ print s.get_whole_plural('loaves', 10)
 print s.get_nouns('purchase', 10)
 print s.get_nouns_plural('purchase', 10)
 
-# This method takes a Penn Treebank part-of-speech tag and the number of requested results instead of a word.
+# Penn Treebank methods
 print s.get_most_common_words('VB', 10)
+print s.get_most_common_tag('house')
 ```
