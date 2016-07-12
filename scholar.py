@@ -27,6 +27,9 @@ class Scholar:
 		self.number_analogy_results = 20
 		self.autoAddTags = True
 		self.load_word2vec('scholar/wikipedia_articles_parsey.bin')
+		# This is a list of the tags as organized in the text file
+		self.tag_list = ['CC', 'CD', 'DT', 'EX', 'FW', 'IN', 'JJ', 'JJR', 'JJS', 'LS', 'MD', 'NN', 'NNS', 'NNP', 'NNPS', 'PDT', 'POS', 'PRP', 'PRP$', 'RB', 'RBR', 'RBS', 'RP', 'SYM', 'TO', 'UH', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'WDT', 'WP', 'WP$', 'WRB']
+		self.load_tag_counts('scholar/enwiki_dist_parsey.txt')
 
 	# Return a list of words from a file
 	def load_desired_vocab(self, filename):
@@ -39,6 +42,20 @@ class Scholar:
 	# Loads the word2vec model from a specified file
 	def load_word2vec(self, model_filename):
 		self.model = word2vec.load(model_filename)
+
+	# Loads the part of speech tag counts into a dictionary (words to tag string delimited by '-'s)
+	def load_tag_counts(self, tag_count_filename):
+		# Read in the tag information for each word from the file
+		with open(tag_count_filename) as f:
+			word_tag_dist = f.read()
+
+		# Save each word to a list of tags in a global dictionary
+		self.word_to_tags = {}
+		for line in word_tag_dist.split():
+			pieces = line.split('.')
+			word = pieces[0]
+			tags = pieces[1].split('-')
+			self.word_to_tags[word] = tags
 
 	# Return the cosine similarity of vectors for two specified words
 	def get_cosine_similarity(self, word1, word2):
@@ -171,7 +188,7 @@ class Scholar:
 
 	# Returns canonical results for specified relationships between words
 	# As an aside, this is simply returning the results of all the analogies from all the canonical pairs.
-	# Occasionally it returns unexpected tags (ei user requested a list of adjectives related to a noun, 
+	# Occasionally it returns unexpected tags (ie user requested a list of adjectives related to a noun, 
 	# and got mostly adjectives but also one preposition). Be aware of this if it matters.
 	def get_canonical_results_for_nouns(self, noun, query_tag, canonical_tag_filename, plural, number_of_user_results):
 		if self.autoAddTags:
@@ -233,7 +250,7 @@ class Scholar:
 
 	# Returns canonical results for specified relationships between words
 	# As an aside, this is simply returning the results of all the analogies from all the canonical pairs.
-	# Occasionally it returns unexpected tags (ei user requested a list of adjectives related to a noun, 
+	# Occasionally it returns unexpected tags (ie user requested a list of adjectives related to a noun, 
 	# and got mostly adjectives but also one preposition). Be aware of this if it matters.
 	def get_canonical_results_for_verbs(self, verb, canonical_tag_filename, plural, number_of_user_results):
 		canonical_pairs = open(canonical_tag_filename)
@@ -274,15 +291,12 @@ class Scholar:
 		return final_results
 
 	def get_most_common_words(self, pos_tag, number_of_results):
-		# This is a list of the tags as organized in the text file
-		tag_list = ['CC', 'CD', 'DT', 'EX', 'FW', 'IN', 'JJ', 'JJR', 'JJS', 'LS', 'MD', 'NN', 'NNS', 'NNP', 'NNPS', 'PDT', 'POS', 'PRP', 'PRP$', 'RB', 'RBR', 'RBS', 'RP', 'SYM', 'TO', 'UH', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'WDT', 'WP', 'WP$', 'WRB']
-
 		# If the tag doesn't exist, return nothing
-		if pos_tag not in tag_list or not os.path.exists('scholar/enwiki_dist_parsey.txt'):
+		if pos_tag not in self.tag_list or not os.path.exists('scholar/enwiki_dist_parsey.txt'):
 			return []
 
 		# Get the index of the specific tag requested in the list above
-		tag_index = tag_list.index(pos_tag)
+		tag_index = self.tag_list.index(pos_tag)
 
 		# Read in the tag information for each word from the file
 		with open('scholar/enwiki_dist_parsey.txt') as f:
@@ -315,6 +329,11 @@ class Scholar:
 
 		# Only return the number of results specified by the user
 		return common_words[:number_of_results]
+
+	# Returns the most common tag for a specific word
+	def get_most_common_tag(self, word):
+		word_tags = self.word_to_tags[word]
+		return self.tag_list[word_tags.index(max(word_tags))]
 
 #----------------------Highest Score Method----------------------
 
