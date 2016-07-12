@@ -38,7 +38,7 @@ print s.get_whole_plural('loaves', 10)
 print s.get_nouns('purchase', 10)
 print s.get_nouns_plural('purchase', 10)
 
-# Penn Treebank methods
+# Penn Treebank methods (these methods only work if the corpus is part-of-speech tagged)
 print s.get_most_common_words('VB', 10)
-print s.get_most_common_tag('house')
+print s.get_most_common_tag('house') # This method should never be run with a tag
 ```
