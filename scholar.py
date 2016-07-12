@@ -335,6 +335,14 @@ class Scholar:
 		word_tags = self.word_to_tags[word]
 		return self.tag_list[word_tags.index(max(word_tags))]
 
+	# Returns True if the word/tag pair exists in the Wikipedia corpus
+	def exists_in_model(self, word):
+		try:
+			vector = self.model.get_vector(word)
+			return True
+		except:
+			return False
+
 #----------------------Highest Score Method----------------------
 
 	# Return the analogy results for a list of words (input: "king -man woman")
