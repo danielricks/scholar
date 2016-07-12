@@ -16,6 +16,7 @@ import scholar.scholar as sch
 s = sch.Scholar()
 print s.get_cosine_similarity('man', 'woman')
 print s.analogy('king -man woman')
+print s.exists_in_model('peppercorn')
 
 # For singular nouns
 print s.get_verbs('mailbox', 10) # Where 10 is the number of desired results
