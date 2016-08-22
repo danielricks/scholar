@@ -321,7 +321,7 @@ class Scholar:
 		taglist = tag_to_word.keys()
 		# Sort the list of tag numbers from lowest to highest
 		if (sys.version_info > (3, 0)):
-			taglist = sorted(taglist, key=lambda k: int(k) if k.isdigit() else float('-inf'))
+			taglist = sorted(taglist, key=lambda k: int(k))
 		else:
 			taglist.sort()
 		# Reverse the list (to highest to lowest)
