@@ -320,7 +320,10 @@ class Scholar:
 		common_words = []
 		taglist = tag_to_word.keys()
 		# Sort the list of tag numbers from lowest to highest
-		taglist.sort()
+		if (sys.version_info > (3, 0)):
+			taglist = sorted(taglist, key=lambda k: int(k) if k.isdigit() else float('-inf'))
+		else:
+			taglist.sort()
 		# Reverse the list (to highest to lowest)
 		taglist.reverse()
 		# Add the words for each tag number to a list
