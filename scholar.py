@@ -75,7 +75,7 @@ class Scholar:
 	def get_positives_and_negatives(self, words):
 		positives = []
 		negatives = []
-		for x in xrange(len(words)):
+		for x in range(len(words)):
 			word_arg = words[x]
 			if word_arg.startswith('-'):
 				negatives.append(word_arg[1:])
@@ -105,10 +105,10 @@ class Scholar:
 			word_vectors.append(self.model[tagged_word])
 		word_salience = {}
 		# For every word in the sentence...
-		for word_index in xrange( len(sentence) ):
+		for word_index in range( len(sentence) ):
 			total_vector = np.array([0.0] * 100)
 			# Add up the vectors for every other word in the sentence...
-			for vector_index in xrange( len(word_vectors) ): 
+			for vector_index in range( len(word_vectors) ): 
 				if word_index != vector_index:
 					total_vector += word_vectors[vector_index]
 			# Find the average for those vectors
@@ -229,7 +229,7 @@ class Scholar:
 				result_list = []
 			# ...and adds those results to a map (sorting depending on popularity, Poll method)
 			for result in result_list:
-				if result_map.has_key(result):
+				if result in result_map.keys():
 					result_map[result] += 1
 				else:
 					result_map[result] = 1
@@ -244,6 +244,8 @@ class Scholar:
 					# ...add it to the list. (This is so that the results are sorted to the list in order of popularity)
 					final_results.append(key)
 			current_max -= 1
+		print(len(result_list))
+		print(len(final_results))
 		if len(final_results) >= number_of_user_results:
 			return final_results[0:number_of_user_results]
 		return final_results
@@ -271,7 +273,7 @@ class Scholar:
 				result_list = []
 			# ...and adds those results to a map (sorting depending on popularity, Poll method)
 			for result in result_list:
-				if result_map.has_key(result):
+				if result in result_map.keys():
 					result_map[result] += 1
 				else:
 					result_map[result] = 1
@@ -345,61 +347,4 @@ class Scholar:
 			return True
 		except:
 			return False
-
-#----------------------Highest Score Method----------------------
-
-	# Return the analogy results for a list of words (input: "king -man woman")
-	def analogy_2(self, words_string):
-		positives, negatives = self.get_positives_and_negatives(words_string.split())
-		return self.get_results_for_words_2(positives, negatives)
-
-	# Returns the results of entering a list of positive and negative words into word2vec
-	def get_results_for_words_2(self, positives, negatives):
-		indexes, metrics = self.model.analogy(pos=positives, neg=negatives, n=self.number_analogy_results)
-		results = self.model.generate_response(indexes, metrics).tolist()
-		word_tags = []
-		for word_value in results:
-			new_tuple = ( str(word_value[0]), word_value[1] )
-			word_tags.append(new_tuple)
-		return word_tags
-
-	# Separate out from verb and adjective options, provide filename for canonical pairs
-	def get_related_words_2(self, noun, query_tag):
-		canonical_tag_filename = ''
-		if query_tag == 'VB':
-			canonical_tag_filename = 'scholar/canon_verbs.txt'
-		elif query_tag == 'JJ':
-			canonical_tag_filename = 'scholar/canon_adj.txt'
-		if canonical_tag_filename == '':
-			return
-		return self.get_words_2(noun, query_tag, canonical_tag_filename)
-
-	# Highest Score method
-	# Returns a list of likely verbs for a given noun
-	def get_words_2(self, noun, query_tag, canonical_tag_filename):
-		canonical_pairs = open(canonical_tag_filename)
-		score_to_verb = {}
-		# Run analogy on the word versus canonical pairs
-		for line in canonical_pairs:
-			words = line.split()
-			query_string = words[0] + '_' + query_tag + ' -' + words[1] + '_NN ' + noun
-			verb_score_list = self.analogy_2(query_string)
-			# For every verb returned...
-			for verb_score in verb_score_list:
-				score_to_verb[verb_score[1]] = verb_score[0]
-#		print score_to_verb
-		new_score_list = score_to_verb.keys()
-		new_score_list.sort()
-		new_score_list.reverse()
-		final_results = []
-		current_index = 0
-		while len(final_results) < self.number_of_results and current_index < self.number_of_results:
-			word = score_to_verb[new_score_list[current_index]]
-			if word not in final_results:
-				final_results.append(word)
-			current_index += 1
-		return final_results
-
-	def get_antonyms(self, noun):
-		return None
 
