@@ -244,8 +244,6 @@ class Scholar:
 					# ...add it to the list. (This is so that the results are sorted to the list in order of popularity)
 					final_results.append(key)
 			current_max -= 1
-		print(len(result_list))
-		print(len(final_results))
 		if len(final_results) >= number_of_user_results:
 			return final_results[0:number_of_user_results]
 		return final_results
