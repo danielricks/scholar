@@ -333,6 +333,32 @@ class Scholar:
 		# Only return the number of results specified by the user
 		return common_words[:number_of_results]
 
+	def get_words_by_rarity(self, sentence):
+		# Clean up input sentence (remove punctuation and unnecessary white space)
+		sentence = sentence.replace('.', ' ').replace(',', ' ').replace('!', ' ').replace('?', ' ').replace(':', ' ').replace(';', ' ').replace('-', ' ')
+		while '  ' in sentence:
+			sentence = sentence.replace('  ', ' ')
+		# Create dictionary of words to their popularities
+		word_to_pop = {}
+		for word in sentence.split():
+			word_to_pop[word] = self.get_word_popularity(word)
+		# Return list of words sorted by popularities
+		return sorted(word_to_pop, key=word_to_pop.__getitem__)
+
+	# Returns the popularity of a word (without a tag)
+	def get_word_popularity(self,word):
+		try:
+			popularity = 0
+			for tag_amount in self.word_to_tags[word]:
+				popularity += int(tag_amount)#int(self.word_to_tags[word][tag_amount])
+			print(popularity)
+			return popularity
+		except:
+			if (sys.version_info > (3, 0)):
+				return math.inf
+			else:
+				return float('inf')
+
 	# Returns the most common tag for a specific word
 	def get_most_common_tag(self, word):
 		word_tags = self.word_to_tags[word]
