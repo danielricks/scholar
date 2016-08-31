@@ -17,6 +17,7 @@ s = sch.Scholar()
 print s.get_cosine_similarity('man', 'woman')
 print s.analogy('king -man woman')
 print s.exists_in_model('peppercorn')
+print s.get_words_by_rarity('the boy walked across the wasteland.')
 
 # For singular nouns
 print s.get_verbs('mailbox', 10) # Where 10 is the number of desired results
