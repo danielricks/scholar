@@ -351,7 +351,6 @@ class Scholar:
 			popularity = 0
 			for tag_amount in self.word_to_tags[word]:
 				popularity += int(tag_amount)#int(self.word_to_tags[word][tag_amount])
-			print(popularity)
 			return popularity
 		except:
 			if (sys.version_info > (3, 0)):
