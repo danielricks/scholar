@@ -9,7 +9,7 @@ You will need a Word2Vec .bin file and the file that has the words from Wikipedi
 
 ## Usage
 
-The available methods are demonstrated below. Remember that if you are using a POS-tagged .bin file, you need to append '_NN', etc. onto all your words.
+The available methods are demonstrated below. Remember that if you are using a POS-tagged .bin file, you need to append '_NN', etc. onto all your queries.
 
 ```python
 import scholar.scholar as sch
