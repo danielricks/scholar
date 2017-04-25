@@ -1,35 +1,37 @@
 import word2vec, sys, os, math
 import numpy as np
+import cPickle as pkl
 
 ''' Files used by this class:
-		canon_adj.txt
-		canon_hypernym.txt
-		canon_meronym.txt
-		canon_verbs.txt
-		wikipedia_articles_parsey.bin
+		canon_adj.txt		canon_adj_pl.txt
+		canon_hypernym.txt	canon_hypernym_pl.txt
+		canon_meronym.txt	canon_meronym_pl.txt
+		canon_verbs.txt		canon_verbs_pl.txt
 
-Class Summary: Scholar()
-Methods:	get_verbs([singular noun])
- 			get_adjectives([singular noun])
-			get_hypernyms([singular noun])
-			get_hyponyms([singular noun])
-			get_parts([singular noun])
-			get_whole([singular noun])
- 			get_cosine_similarity([singular noun], [singular noun])
-			get_analogy([string consisting of words separated by spaces, with '-' preceding at least one word])
+		postagged_wikipedia_for_word2vec.bin			(word2vec-compatible file using all pos-tagged Wikipedia, Jan 2016)
+		postagged_wikipedia_for_word2vec_30kn3kv.pkl	(scholar-compatible file using top 30k nouns, 3k verbs, same corpus)
+		postag_distributions_for_scholar.txt			(pos-tag distributions for all words in Wikipedia)
+		postag_distributions_for_scholar_30kn3kv.txt	(pos-tag distributions for top 30k nouns, 3k verbs, same corpus)
 '''
 
 class Scholar:
 
 	# Initializes the class
-	def __init__(self):
+	def __init__(self, slim=False):
+		self.slim = slim
+		if self.slim:
+			self.word2vec_bin_loc = 'scholar/postagged_wikipedia_for_word2vec_30kn3kv.pkl'
+			self.tag_distribution_loc = 'scholar/postag_distributions_for_scholar_30kn3kv.txt'
+		else:
+			self.word2vec_bin_loc = 'scholar/postagged_wikipedia_for_word2vec.bin'
+			self.tag_distribution_loc = 'scholar/postag_distributions_for_scholar.txt'
 		self.number_of_results = 10
 		self.number_analogy_results = 20
 		self.autoAddTags = True
-		self.load_word2vec('scholar/wikipedia_articles_parsey.bin')
+		self.load_word2vec(self.word2vec_bin_loc)
 		# This is a list of the tags as organized in the text file
 		self.tag_list = ['CC', 'CD', 'DT', 'EX', 'FW', 'IN', 'JJ', 'JJR', 'JJS', 'LS', 'MD', 'NN', 'NNS', 'NNP', 'NNPS', 'PDT', 'POS', 'PRP', 'PRP$', 'RB', 'RBR', 'RBS', 'RP', 'SYM', 'TO', 'UH', 'VB', 'VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'WDT', 'WP', 'WP$', 'WRB']
-		self.load_tag_counts('scholar/enwiki_dist_parsey.txt')
+		self.load_tag_counts(self.tag_distribution_loc)
 
 	# Return a list of words from a file
 	def load_desired_vocab(self, filename):
@@ -41,7 +43,10 @@ class Scholar:
 
 	# Loads the word2vec model from a specified file
 	def load_word2vec(self, model_filename):
-		self.model = word2vec.load(model_filename)
+		if self.slim:
+		    self.model = pkl.load(open(model_filename, 'r'))
+		else:
+		    self.model = word2vec.load(model_filename)
 
 	# Loads the part of speech tag counts into a dictionary (words to tag string delimited by '-'s)
 	def load_tag_counts(self, tag_count_filename):
@@ -292,14 +297,14 @@ class Scholar:
 
 	def get_most_common_words(self, pos_tag, number_of_results):
 		# If the tag doesn't exist, return nothing
-		if pos_tag not in self.tag_list or not os.path.exists('scholar/enwiki_dist_parsey.txt'):
+		if pos_tag not in self.tag_list or not os.path.exists(self.tag_distribution_loc):
 			return []
 
 		# Get the index of the specific tag requested in the list above
 		tag_index = self.tag_list.index(pos_tag)
 
 		# Read in the tag information for each word from the file
-		with open('scholar/enwiki_dist_parsey.txt') as f:
+		with open(self.tag_distribution_loc) as f:
 			word_tag_dist = f.read()
 
 		tag_to_word = {}
