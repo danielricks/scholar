@@ -60,6 +60,7 @@ class Scholar:
 			pieces = line.split('.')
 			word = pieces[0]
 			tags = pieces[1].split('-')
+			tags = map(int, tags)
 			self.word_to_tags[word] = tags
 
 	# Return the cosine similarity of vectors for two specified words
