@@ -72,6 +72,14 @@ class Scholar:
 		result = dividend / divisor
 		return result
 
+	# Return the angle between two vectors (assumes a hypersphere)
+	def get_angle(self, word1, word2):
+		vec1 = self.model.get_vector(word1)
+		vec2 = self.model.get_vector(word2)
+		unit_vec1 = vec1 / np.linalg.norm(vec1)
+		unit_vec2 = vec2 / np.linalg.norm(vec2)
+		return np.arccos(np.clip(np.dot(unit_vec1, unit_vec2), -1.0, 1.0))
+
 	# Return the analogy results for a list of words (input: "king -man woman")
 	def analogy(self, words_string):
 		positives, negatives = self.get_positives_and_negatives(words_string.split())
