@@ -24,6 +24,7 @@ s = sch.Scholar()
 s.get_cosine_similarity('man_NN', 'woman_NN')
 s.analogy('king_NN -man_NN woman_NN')
 s.exists_in_model('peppercorn_NN')
+s.get_angle('dog_NN', 'cat_NN')
 
 # The below methods DO NOT require the use of a Penn Treebank tag.
 
@@ -68,6 +69,7 @@ s = sch.Scholar(slim=True)
 s.get_cosine_similarity('man_NN', 'woman_NN')
 s.analogy('king_NN -man_NN woman_NN')
 s.exists_in_model('peppercorn_NN')
+s.get_angle('dog_NN', 'cat_NN')
 
 # The below methods DO NOT require the use of a Penn Treebank tag.
 
