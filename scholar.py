@@ -1,6 +1,7 @@
 import word2vec, sys, os, math
 import numpy as np
 import cPickle as pkl
+import hyperangles
 
 ''' Files used by this class:
 		canon_adj.txt		canon_adj_pl.txt
@@ -72,13 +73,26 @@ class Scholar:
 		result = dividend / divisor
 		return result
 
-	# Return the angle between two vectors (assumes a hypersphere)
+	# Return the vector for a word, else return None
+	def get_vector(self, word):
+		if self.exists_in_model(word):
+			return self.model.get_vector(word)
+		return None
+
+	# Return the angle between two angles (assumes a hypersphere)
+	def angle(self, vec1, vec2):
+		unit_vec1 = vec1 / np.linalg.norm(vec1)
+		unit_vec2 = vec2 / np.linalg.norm(vec2)
+		return np.arccos(np.clip(np.dot(unit_vec1, unit_vec2), -1.0, 1.0)) # this is wrong (needs multi-dimensional)
+
+	# Return the angle between two words
 	def get_angle(self, word1, word2):
 		vec1 = self.model.get_vector(word1)
 		vec2 = self.model.get_vector(word2)
-		unit_vec1 = vec1 / np.linalg.norm(vec1)
-		unit_vec2 = vec2 / np.linalg.norm(vec2)
-		return np.arccos(np.clip(np.dot(unit_vec1, unit_vec2), -1.0, 1.0))
+		return self.angle(vec1, vec2)
+
+	def get_closest_words(self, vec):
+		return self.model.get_closest_words(vec, 10)
 
 	# Return the analogy results for a list of words (input: "king -man woman")
 	def analogy(self, words_string):
@@ -143,6 +157,67 @@ class Scholar:
 		# Reverse the list
 		words_sorted_by_salience.reverse()
 		return words_sorted_by_salience
+
+	def get_vector(self, word):
+		return self.model[word]
+
+	def get_canonical_results_for_nouns_hyper(self, noun, query_tag, canonical_tag_filename, plural, number_of_user_results):
+		if self.autoAddTags:
+			noun += '_NNS' if plural else '_NN'
+		canonical_pairs = open(canonical_tag_filename)
+		result_map = {}
+		# For every line in the file of canonical pairs...
+		for line in canonical_pairs:
+			# ...split into separate words...
+			words = line.split()
+			if plural:
+				if query_tag == 'VB' or query_tag == 'JJ':
+					query_string = words[0] + '_' + query_tag + ' -' + words[1] + '_NNS ' + noun
+				elif query_tag == 'HYPER':
+					query_string = words[0] + '_NNS -' + words[1] + '_NNS ' + noun
+				elif query_tag == 'HYPO':
+					query_string = words[1] + '_NNS -' + words[0] + '_NNS ' + noun
+				elif query_tag == 'PARTS':
+					query_string = '-' + words[0] + '_NNS ' + words[1] + '_NNS ' + noun
+				elif query_tag == 'WHOLE':
+					query_string = '-' + words[1] + '_NNS ' + words[0] + '_NNS ' + noun
+			else:
+				if query_tag == 'VB' or query_tag == 'JJ':
+					query_string = words[0] + '_' + query_tag + ' -' + words[1] + '_NN ' + noun
+				elif query_tag == 'HYPER':
+					query_string = words[0] + '_NN -' + words[1] + '_NN ' + noun
+				elif query_tag == 'HYPO':
+					query_string = words[1] + '_NN -' + words[0] + '_NN ' + noun
+				elif query_tag == 'PARTS':
+					query_string = '-' + words[0] + '_NN ' + words[1] + '_NN ' + noun
+				elif query_tag == 'WHOLE':
+					query_string = '-' + words[1] + '_NN ' + words[0] + '_NN ' + noun
+
+			# ...performs an analogy using the words...
+			try:
+				result_list = self.analogy(query_string)
+			except:
+				result_list = []
+			# ...and adds those results to a map (sorting depending on popularity, Poll method)
+			for result in result_list:
+				if result in result_map.keys():
+					result_map[result] += 1
+				else:
+					result_map[result] = 1
+		final_results = []
+		current_max = number_of_user_results
+		# While we haven't reached the requested number of results and the number of possible matches is within reason...
+		while len(final_results) < number_of_user_results and current_max > 0:
+			# ...for every key in the results...
+			for key in result_map.keys():
+				# ...if the number of times a result has been seen equals the current 'number of matches'...
+				if result_map[key] == current_max:
+					# ...add it to the list. (This is so that the results are sorted to the list in order of popularity)
+					final_results.append(key)
+			current_max -= 1
+		if len(final_results) >= number_of_user_results:
+			return final_results[0:number_of_user_results]
+		return final_results
 
 	# Returns the canonical results for verbs
 	def get_verbs(self, noun, number_of_user_results):
