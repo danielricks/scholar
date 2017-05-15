@@ -1,7 +1,6 @@
 import word2vec, sys, os, math
 import numpy as np
 import cPickle as pkl
-import hyperangles
 
 ''' Files used by this class:
 		canon_adj.txt		canon_adj_pl.txt
