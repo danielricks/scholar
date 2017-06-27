@@ -459,3 +459,15 @@ class Scholar:
 		except:
 			return False
 
+	#Returns the nearest words for a specific vector
+	def return_words(self, input_vector, num_matches):
+		distances = 1 - np.dot(self.model.vectors, input_vector.T) / np.linalg.norm(input_vector)
+		found_words = []
+		found_distance = []
+		for count in range(0, num_matches):
+			min_dist = np.nanmin(distances)
+			index = np.where(distances==min_dist)[0][0]
+			found_words.append(self.model.vocab[index])
+			found_distance.append(min_dist)
+			distances[index] = 1000
+		return found_words, found_distance
