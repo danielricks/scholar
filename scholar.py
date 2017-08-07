@@ -78,6 +78,16 @@ class Scholar:
 			return self.model.get_vector(word)
 		return None
 
+	# Returns the vector for an untagged word
+	def get_vector_untagged(self, word):
+		tag = self.get_most_common_tag(word)
+		return self.get_vector(word + '_' + tag)
+
+	# Return the tag and vector for a word (unique in that it returns two variables)
+	def get_vector_untagged(self, word):
+		tag = self.get_most_common_tag(word)
+		return tag, self.get_vector(word + '_' + tag)
+
 	# Return the angle between two angles (assumes a hypersphere)
 	def angle(self, vec1, vec2):
 		unit_vec1 = vec1 / np.linalg.norm(vec1)
@@ -90,8 +100,19 @@ class Scholar:
 		vec2 = self.model.get_vector(word2)
 		return self.angle(vec1, vec2)
 
-	def get_closest_words(self, vec):
+	# Returns the words closest to a tagged word
+	def get_closest_words(self, word):
+		vector = self.get_vector
+		return self.get_closest_word_vector(vector)
+
+	# Returns the words closest to a vector
+	def get_closest_words_vector(self, vec):
 		return self.model.get_closest_words(vec, 10)
+
+	# Returns the words closest to an untagged word
+	def get_closest_words_untagged(self, word):
+		tag = self.get_most_common_tag(word)
+		return self.get_closest_words(word + '_' + tag)
 
 	# Return the analogy results for a list of words (input: "king -man woman")
 	def analogy(self, words_string):
@@ -123,7 +144,7 @@ class Scholar:
 			words.append(str(word_value[0]))
 		return words
 
-	# Returns a list of the words in a tagged sentence ordered by salience (as determined by Word2Vec)
+	# Returns a list of the words in a tagged sentence ordered by salience ("interest", as determined by Word2Vec)
 	def get_words_by_salience(self, sentence):
 		sentence = sentence.split()
 		word_vectors = []
@@ -156,67 +177,6 @@ class Scholar:
 		# Reverse the list
 		words_sorted_by_salience.reverse()
 		return words_sorted_by_salience
-
-	def get_vector(self, word):
-		return self.model[word]
-
-	def get_canonical_results_for_nouns_hyper(self, noun, query_tag, canonical_tag_filename, plural, number_of_user_results):
-		if self.autoAddTags:
-			noun += '_NNS' if plural else '_NN'
-		canonical_pairs = open(canonical_tag_filename)
-		result_map = {}
-		# For every line in the file of canonical pairs...
-		for line in canonical_pairs:
-			# ...split into separate words...
-			words = line.split()
-			if plural:
-				if query_tag == 'VB' or query_tag == 'JJ':
-					query_string = words[0] + '_' + query_tag + ' -' + words[1] + '_NNS ' + noun
-				elif query_tag == 'HYPER':
-					query_string = words[0] + '_NNS -' + words[1] + '_NNS ' + noun
-				elif query_tag == 'HYPO':
-					query_string = words[1] + '_NNS -' + words[0] + '_NNS ' + noun
-				elif query_tag == 'PARTS':
-					query_string = '-' + words[0] + '_NNS ' + words[1] + '_NNS ' + noun
-				elif query_tag == 'WHOLE':
-					query_string = '-' + words[1] + '_NNS ' + words[0] + '_NNS ' + noun
-			else:
-				if query_tag == 'VB' or query_tag == 'JJ':
-					query_string = words[0] + '_' + query_tag + ' -' + words[1] + '_NN ' + noun
-				elif query_tag == 'HYPER':
-					query_string = words[0] + '_NN -' + words[1] + '_NN ' + noun
-				elif query_tag == 'HYPO':
-					query_string = words[1] + '_NN -' + words[0] + '_NN ' + noun
-				elif query_tag == 'PARTS':
-					query_string = '-' + words[0] + '_NN ' + words[1] + '_NN ' + noun
-				elif query_tag == 'WHOLE':
-					query_string = '-' + words[1] + '_NN ' + words[0] + '_NN ' + noun
-
-			# ...performs an analogy using the words...
-			try:
-				result_list = self.analogy(query_string)
-			except:
-				result_list = []
-			# ...and adds those results to a map (sorting depending on popularity, Poll method)
-			for result in result_list:
-				if result in result_map.keys():
-					result_map[result] += 1
-				else:
-					result_map[result] = 1
-		final_results = []
-		current_max = number_of_user_results
-		# While we haven't reached the requested number of results and the number of possible matches is within reason...
-		while len(final_results) < number_of_user_results and current_max > 0:
-			# ...for every key in the results...
-			for key in result_map.keys():
-				# ...if the number of times a result has been seen equals the current 'number of matches'...
-				if result_map[key] == current_max:
-					# ...add it to the list. (This is so that the results are sorted to the list in order of popularity)
-					final_results.append(key)
-			current_max -= 1
-		if len(final_results) >= number_of_user_results:
-			return final_results[0:number_of_user_results]
-		return final_results
 
 	# Returns the canonical results for verbs
 	def get_verbs(self, noun, number_of_user_results):
@@ -378,6 +338,7 @@ class Scholar:
 			return final_results[0:number_of_user_results]
 		return final_results
 
+	# Returns the most common words by tag
 	def get_most_common_words(self, pos_tag, number_of_results):
 		# If the tag doesn't exist, return nothing
 		if pos_tag not in self.tag_list or not os.path.exists(self.tag_distribution_loc):
@@ -421,6 +382,7 @@ class Scholar:
 		# Only return the number of results specified by the user
 		return common_words[:number_of_results]
 
+	# Returns words in a sentence sorted by "rarity", most rare first
 	def get_words_by_rarity(self, sentence):
 		# Clean up input sentence (remove punctuation and unnecessary white space)
 		sentence = sentence.replace('.', ' ').replace(',', ' ').replace('!', ' ').replace('?', ' ').replace(':', ' ').replace(';', ' ').replace('-', ' ')
@@ -433,12 +395,12 @@ class Scholar:
 		# Return list of words sorted by popularities
 		return sorted(word_to_pop, key=word_to_pop.__getitem__)
 
-	# Returns the popularity of a word (without a tag)
-	def get_word_popularity(self,word):
+	# Returns the "popularity" of an untagged word
+	def get_word_popularity(self, word):
 		try:
 			popularity = 0
 			for tag_amount in self.word_to_tags[word]:
-				popularity += int(tag_amount)#int(self.word_to_tags[word][tag_amount])
+				popularity += int(tag_amount)
 			return popularity
 		except:
 			if (sys.version_info > (3, 0)):
@@ -459,7 +421,7 @@ class Scholar:
 		except:
 			return False
 
-	#Returns the nearest words for a specific vector
+	# Returns the nearest words for a specific vector
 	def return_words(self, input_vector, num_matches):
 		distances = 1 - np.dot(self.model.vectors, input_vector.T) / np.linalg.norm(input_vector)
 		found_words = []

@@ -3,5 +3,6 @@
 gensim_tagged
 *.npy
 *.bin
+*.pkl
 *.txt~
 enwiki_dist_parsey.txt
