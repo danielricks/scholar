@@ -1,9 +1,9 @@
 # scholar
 This code provides an interface for Word2Vec in Python. It uses a part-of-speech-tagged corpus, so that we can query for specific parts of speech. It is intended to be used with [autoplay](https://github.com/danielricks/autoplay), a learning environment for interactive fiction.
 
-## Requirements
-
 Per standard natural language processing, we used [Penn Treebank tags](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html) to denote parts of speech. We tagged a copy of Wikipedia from January 2016 (using [Parsey McParseface](https://github.com/tensorflow/models/tree/master/syntaxnet)) and used that as input to word2vec.
+
+## Requirements
 
 Our processed files are available [here](https://drive.google.com/open?id=0B3lpCS07rg43bVBmd1lSVUVSb28). We provide a truncated version of the binary file as well, stored in pickle format. This truncated version contains the top 30,000 most popular singular nouns on Wikipedia, and the top 3,000 verbs. It runs much faster than the full binary, but also loses access to some methods. I would honestly recommend using the truncated corpus, since the speed-up is significant, and most of the real functionality is included. That download link also provides pre-computed distributions of word-to-pos-tags, to speed up computation during run-time.
 
