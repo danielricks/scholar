@@ -421,6 +421,13 @@ class Scholar:
 		except:
 			return False
 
+	# Returns True if the untagged word exists in the text file
+	def exists_in_model_untagged(self, word):
+		if word in self.word_to_tags:
+			return True
+		else:
+			return False
+
 	# Returns the nearest words for a specific vector
 	def get_words(self, input_vector, num_matches):
 		distances = 1 - np.dot(self.model.vectors, input_vector.T) / np.linalg.norm(input_vector)
