@@ -57,7 +57,7 @@ s.get_most_common_words('VB', 10) # Takes a tag as a parameter
 s.get_most_common_tag('dog') # Does not require tag
 s.get_words_by_rarity('the boy walked across the wasteland.') # Does not require tag
 s.exists_in_model('dog_NN') # Requires tag
-s.exists_in_model_untagged('dog') * Does not require tag
+s.exists_in_model_untagged('dog') # Does not require tag
 ```
 
 The methods available using the truncated corpus are below. Again, some require tags, and some don't.
@@ -93,6 +93,6 @@ s.get_whole('bread', 10)
 s.get_most_common_words('VB', 10) # Takes a tag as a parameter
 s.get_most_common_tag('dog') # This method should never be run with a tag
 s.exists_in_model('dog_NN') # Requires tag
-s.exists_in_model_untagged('dog') * Does not require tag
+s.exists_in_model_untagged('dog') # Does not require tag
 
 ```
