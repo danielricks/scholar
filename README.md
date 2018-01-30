@@ -25,7 +25,8 @@ s.get_cosine_similarity('man_NN', 'woman_NN')
 s.analogy('king_NN -man_NN woman_NN')
 s.exists_in_model('peppercorn_NN')
 s.get_angle('dog_NN', 'cat_NN')
-s.get_vector('dog_NN')
+dog_vec = s.get_vector('dog_NN')
+s.get_words(dog_vec, 10)
 
 # The below methods DO NOT require the use of a Penn Treebank tag.
 
@@ -55,6 +56,8 @@ s.get_nouns_plural('purchase', 10)
 s.get_most_common_words('VB', 10) # Takes a tag as a parameter
 s.get_most_common_tag('dog') # Does not require tag
 s.get_words_by_rarity('the boy walked across the wasteland.') # Does not require tag
+s.exists_in_model('dog_NN') # Requires tag
+s.exists_in_model_untagged('dog') * Does not require tag
 ```
 
 The methods available using the truncated corpus are below. Again, some require tags, and some don't.
@@ -71,7 +74,8 @@ s.get_cosine_similarity('man_NN', 'woman_NN')
 s.analogy('king_NN -man_NN woman_NN')
 s.exists_in_model('peppercorn_NN')
 s.get_angle('dog_NN', 'cat_NN')
-s.get_vector('dog_NN')
+dog_vec = s.get_vector('dog_NN')
+s.get_words(dog_vec, 10)
 
 # The below methods DO NOT require the use of a Penn Treebank tag.
 
@@ -88,5 +92,7 @@ s.get_whole('bread', 10)
 # Miscellaneous
 s.get_most_common_words('VB', 10) # Takes a tag as a parameter
 s.get_most_common_tag('dog') # This method should never be run with a tag
+s.exists_in_model('dog_NN') # Requires tag
+s.exists_in_model_untagged('dog') * Does not require tag
 
 ```
