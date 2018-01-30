@@ -422,7 +422,7 @@ class Scholar:
 			return False
 
 	# Returns the nearest words for a specific vector
-	def return_words(self, input_vector, num_matches):
+	def get_words(self, input_vector, num_matches):
 		distances = 1 - np.dot(self.model.vectors, input_vector.T) / np.linalg.norm(input_vector)
 		found_words = []
 		found_distance = []
