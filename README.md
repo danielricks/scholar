@@ -1,5 +1,5 @@
 # scholar
-This code provides an interface for Word2Vec in Python. It can use a part-of-speech-tagged corpus to query for specific parts of speech. It was intended to be used with [autoplay](https://github.com/danielricks/autoplay), a learning environment for interactive fiction.
+This code provides an interface for Word2Vec in Python. It can use a part-of-speech tagged corpus to query for specific parts of speech. It was intended to be used with [autoplay](https://github.com/danielricks/autoplay), a learning environment for interactive fiction.
 
 ## Requirements
 
