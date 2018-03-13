@@ -5,7 +5,7 @@ This code provides an interface for Word2Vec in Python. It can use a part-of-spe
 
 Our processed files are available [here](https://drive.google.com/open?id=1srOUFidQ9fV240wyF7GW4eqF6raCawBV).
 
-Provided are several bin files: (1) an untagged copy of Wikipedia from January 2016, (2) a part-of-speech tagged copy of Wikipedia, and (3) a truncated version of 2. Per standard natural language processing, we used [Penn Treebank tags](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html) to denote parts of speech. We tagged a copy of Wikipedia from January 2016 (using [Parsey McParseface](https://github.com/tensorflow/models/tree/master/syntaxnet)) and used that as input to word2vec.
+Provided are several bin files: (1) an untagged copy of Wikipedia from January 2016, (2) a part-of-speech tagged copy of Wikipedia, and (3) a truncated version of 2. Per standard natural language processing, we used [Penn Treebank tags](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html) to denote parts of speech. We tagged our copy of Wikipedia (using [Parsey McParseface](https://github.com/tensorflow/models/tree/master/syntaxnet)) and used that as input to word2vec.
 
 The truncated corpus contains the top 30,000 most popular singular nouns on Wikipedia, and the top 3,000 verbs. It is stored in pickle format and loads much faster than the full binary, but also loses access to some methods. I would honestly recommend using the truncated corpus if you can, since the speed-up is significant, and most of the real functionality is included. That download link also provides pre-computed distributions of word-to-pos tags, to speed up computation during runtime.
 
