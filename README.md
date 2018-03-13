@@ -1,11 +1,13 @@
 # scholar
-This code provides an interface for Word2Vec in Python. It uses a part-of-speech-tagged corpus, so that we can query for specific parts of speech. It is intended to be used with [autoplay](https://github.com/danielricks/autoplay), a learning environment for interactive fiction.
-
-Per standard natural language processing, we used [Penn Treebank tags](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html) to denote parts of speech. We tagged a copy of Wikipedia from January 2016 (using [Parsey McParseface](https://github.com/tensorflow/models/tree/master/syntaxnet)) and used that as input to word2vec.
+This code provides an interface for Word2Vec in Python. It can use a part-of-speech-tagged corpus to query for specific parts of speech. It was intended to be used with [autoplay](https://github.com/danielricks/autoplay), a learning environment for interactive fiction.
 
 ## Requirements
 
-Our processed files are available [here](https://drive.google.com/open?id=1srOUFidQ9fV240wyF7GW4eqF6raCawBV). We provide a truncated version of the binary file as well, stored in pickle format. This truncated version contains the top 30,000 most popular singular nouns on Wikipedia, and the top 3,000 verbs. It loads much faster than the full binary, but also loses access to some methods. I would honestly recommend using the truncated corpus, since the speed-up is significant, and most of the real functionality is included. That download link also provides pre-computed distributions of word-to-pos tags, to speed up computation during runtime.
+Our processed files are available [here](https://drive.google.com/open?id=1srOUFidQ9fV240wyF7GW4eqF6raCawBV).
+
+Provided are several bin files: (1) an untagged copy of Wikipedia from January 2016, (2) a part-of-speech tagged copy of Wikipedia, and (3) a truncated version of (2). Per standard natural language processing, we used [Penn Treebank tags](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html) to denote parts of speech. We tagged a copy of Wikipedia from January 2016 (using [Parsey McParseface](https://github.com/tensorflow/models/tree/master/syntaxnet)) and used that as input to word2vec.
+
+The truncated version of (2) contains the top 30,000 most popular singular nouns on Wikipedia, and the top 3,000 verbs. It is stored in pickle format and loads much faster than the full binary, but also loses access to some methods. I would honestly recommend using the truncated corpus if you can, since the speed-up is significant, and most of the real functionality is included. That download link also provides pre-computed distributions of word-to-pos tags, to speed up computation during runtime.
 
 ## Usage
 
@@ -14,7 +16,7 @@ Using linear algebra, we were able to pull affordances (relevant verbs) for noun
 There are 3 options for using scholar.
 1. Untagged words (gives basic word2vec functionality, 4 million words)
 2. POS-tagged words (gives basic word2vec functionality and part-of-speech queries, 4 million words)
-3. Slim POS-tagged words (limited w2v functionality and part-of-speech queries, 30k most popular nouns and verbs)
+3. Slim POS-tagged words (limited w2v functionality and part-of-speech queries, 33k most popular nouns and verbs)
 
 ### Usage Examples
 
