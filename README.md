@@ -16,7 +16,7 @@ Using linear algebra, we were able to pull affordances (relevant verbs) for noun
 There are 3 options for using scholar.
 1. Untagged words (gives basic word2vec functionality, 4 million words)
 2. POS-tagged words (gives basic word2vec functionality and part-of-speech queries, 4 million words)
-3. Slim POS-tagged words (limited w2v functionality and part-of-speech queries, 33k most popular nouns and verbs)
+3. Slim POS-tagged words (limited word2vec functionality and part-of-speech queries, 33k most popular nouns and verbs)
 
 ### Usage Examples
 
