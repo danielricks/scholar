@@ -1,6 +1,8 @@
 # scholar
 This code provides an interface for Word2Vec in Python. It can use a part-of-speech tagged corpus to query for specific parts of speech. It was intended to be used with [autoplay](https://github.com/danielricks/autoplay), a learning environment for interactive fiction.
 
+Using linear algebra, we were able to pull affordances (relevant verbs) for nouns out of word2vec, with varying success on other parts of speech. This interface provides methods that perform those operations.
+
 ## Requirements
 
 Our processed files are available [here](https://drive.google.com/open?id=1srOUFidQ9fV240wyF7GW4eqF6raCawBV).
@@ -10,8 +12,6 @@ Provided are several bin files: (1) an untagged copy of Wikipedia from January 2
 The truncated corpus contains the top 30,000 most popular singular nouns on Wikipedia, and the top 3,000 verbs. It is stored in pickle format and loads much faster than the full binary, but also loses access to some methods. I would honestly recommend using the truncated corpus if you can, since the speed-up is significant, and most of the real functionality is included. The above download link also provides pre-computed distributions of word-to-pos tags, to speed up computation during runtime.
 
 ## Usage
-
-Using linear algebra, we were able to pull affordances (relevant verbs) for nouns out of word2vec, with varying success on other parts of speech. This interface provides methods that perform those operations.
 
 There are 3 options for using scholar.
 1. Untagged words (gives basic word2vec functionality, 4 million words)
