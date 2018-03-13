@@ -41,7 +41,7 @@ s.get_words(dog_vec, 10)
 # Miscellaneous
 s.get_most_common_words('VB', 10) # Takes a tag as a parameter
 s.get_most_common_tag('dog')
-s.get_words_by_rarity('the boy walked across the wasteland.') # Does not require tag
+s.get_words_by_rarity('the boy walked across the wasteland.')
 s.exists_in_model('dog')
 ```
 
