@@ -15,8 +15,8 @@ The truncated corpus contains the top 30,000 most popular singular nouns on Wiki
 
 There are 3 options for using scholar.
 1. Untagged words (gives basic word2vec functionality, 4 million words)
-2. POS-tagged words (gives basic word2vec functionality and part-of-speech queries, 4 million words)
-3. Slim POS-tagged words (limited word2vec functionality and part-of-speech queries, 33k most popular nouns and verbs)
+2. pos-tagged words (gives basic word2vec functionality and part-of-speech queries, 4 million words)
+3. Slim pos-tagged words (limited word2vec functionality and part-of-speech queries, 33k most popular nouns and verbs)
 
 ### Usage Examples
 
@@ -47,7 +47,7 @@ s.get_words_by_rarity('the boy walked across the wasteland.')
 s.exists_in_model('dog')
 ```
 
-2. The available methods using the full POS-tagged corpus are demonstrated below. Some methods require a pos-tag, and some of them don't.
+2. The available methods using the full pos-tagged corpus are demonstrated below. Some methods require a pos-tag, and some of them don't.
 
 ```python
 import scholar.scholar as sch
@@ -96,7 +96,7 @@ s.exists_in_model('dog_NN') # Requires tag
 s.exists_in_model_untagged('dog') # Does not require tag
 ```
 
-3. The methods available using the slim POS-tagged corpus are below. Again, some require tags, and some don't.
+3. The methods available using the slim pos-tagged corpus are below. Again, some require tags, and some don't.
 
 ```python
 import scholar.scholar as sch
