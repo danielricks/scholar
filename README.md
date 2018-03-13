@@ -11,12 +11,46 @@ Our processed files are available [here](https://drive.google.com/open?id=0B3lpC
 
 Using linear algebra, we were able to pull affordances (relevant verbs) for nouns out of word2vec, with varying success on other parts of speech. This interface provides methods that perform those operations.
 
-The available methods using the full binary are demonstrated below. Some methods require a pos-tag, and some of them don't.
+There are 3 options for using scholar.
+1. Untagged words (gives basic word2vec functionality, 4 million words)
+2. POS-tagged words (gives basic word2vec functionality and part-of-speech queries, 4 million words)
+3. Slim POS-tagged words (limited w2v functionality and part-of-speech queries, 30k most popular nouns and verbs)
+
+### Usage Examples
+
+1. The available methods using the full untagged corpus are demonstrated below. Most methods don't require tags, but some miscellaneous methods that do require tags are maintained for convenience.
 
 ```python
 import scholar.scholar as sch
 
-# This will load word2vec using the full corpus
+# This will load word2vec using the full untagged corpus
+s = sch.Scholar(tags=False)
+
+# These methods require a Penn Treebank tag
+
+s.get_cosine_similarity('man', 'woman')
+s.analogy('king -man woman')
+s.exists_in_model('peppercorn')
+s.exists_in_model_untagged('dog') # Does not require tag
+s.get_angle('dog', 'cat')
+dog_vec = s.get_vector('dog')
+s.get_words(dog_vec, 10)
+
+# These methods may or may not require Penn Treebank tags.
+
+# Miscellaneous
+s.get_most_common_words('VB', 10) # Takes a tag as a parameter
+s.get_most_common_tag('dog') # Does not require tag
+s.get_words_by_rarity('the boy walked across the wasteland.') # Does not require tag
+s.exists_in_model('dog_NN') # Requires tag
+```
+
+2. The available methods using the full POS-tagged corpus are demonstrated below. Some methods require a pos-tag, and some of them don't.
+
+```python
+import scholar.scholar as sch
+
+# This will load word2vec using the full tagged corpus
 s = sch.Scholar()
 
 # These methods require a Penn Treebank tag
@@ -60,7 +94,7 @@ s.exists_in_model('dog_NN') # Requires tag
 s.exists_in_model_untagged('dog') # Does not require tag
 ```
 
-The methods available using the truncated corpus are below. Again, some require tags, and some don't.
+3. The methods available using the slim POS-tagged corpus are below. Again, some require tags, and some don't.
 
 ```python
 import scholar.scholar as sch
@@ -94,5 +128,4 @@ s.get_most_common_words('VB', 10) # Takes a tag as a parameter
 s.get_most_common_tag('dog') # This method should never be run with a tag
 s.exists_in_model('dog_NN') # Requires tag
 s.exists_in_model_untagged('dog') # Does not require tag
-
 ```
