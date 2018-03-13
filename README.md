@@ -64,7 +64,7 @@ s.get_angle('dog_NN', 'cat_NN')
 dog_vec = s.get_vector('dog_NN')
 s.get_words(dog_vec, 10)
 
-# The below methods DO NOT require the use of a Penn Treebank tag.
+# The below methods DO NOT require the use of a Penn Treebank tag, but will accept them.
 
 # For singular nouns
 s.get_verbs('mailbox', 10) # Where 10 is the number of desired results
@@ -113,7 +113,7 @@ s.get_angle('dog_NN', 'cat_NN')
 dog_vec = s.get_vector('dog_NN')
 s.get_words(dog_vec, 10)
 
-# The below methods DO NOT require the use of a Penn Treebank tag.
+# The below methods DO NOT require the use of a Penn Treebank tag, but will accept them.
 
 # For singular nouns
 s.get_verbs('mailbox', 10) # Where 10 is the number of desired results
