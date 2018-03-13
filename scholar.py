@@ -17,13 +17,18 @@ import cPickle as pkl
 class Scholar:
 
 	# Initializes the class
-	def __init__(self, slim=False):
+	def __init__(self, slim=False, tags=True):
 		self.slim = slim
-		if self.slim:
-			self.word2vec_bin_loc = 'scholar/postagged_wikipedia_for_word2vec_30kn3kv.pkl'
-			self.tag_distribution_loc = 'scholar/postag_distributions_for_scholar_30kn3kv.txt'
+		self.tags = tags
+		if self.tags:
+			if self.slim:
+				self.word2vec_bin_loc = 'scholar/postagged_wikipedia_for_word2vec_30kn3kv.pkl'
+				self.tag_distribution_loc = 'scholar/postag_distributions_for_scholar_30kn3kv.txt'
+			else:
+				self.word2vec_bin_loc = 'scholar/postagged_wikipedia_for_word2vec.bin'
+				self.tag_distribution_loc = 'scholar/postag_distributions_for_scholar.txt'
 		else:
-			self.word2vec_bin_loc = 'scholar/postagged_wikipedia_for_word2vec.bin'
+			self.word2vec_bin_loc = 'scholar/untagged_wikipedia_for_word2vec.bin'
 			self.tag_distribution_loc = 'scholar/postag_distributions_for_scholar.txt'
 		self.number_of_results = 10
 		self.number_analogy_results = 20
@@ -80,13 +85,10 @@ class Scholar:
 
 	# Returns the vector for an untagged word
 	def get_vector_untagged(self, word):
-		tag = self.get_most_common_tag(word)
-		return self.get_vector(word + '_' + tag)
-
-	# Return the tag and vector for a word (unique in that it returns two variables)
-	def get_vector_untagged(self, word):
-		tag = self.get_most_common_tag(word)
-		return tag, self.get_vector(word + '_' + tag)
+		if self.tags:
+			tag = self.get_most_common_tag(word)
+			return self.get_vector(word + '_' + tag)
+		return self.get_vector(word)
 
 	# Return the angle between two angles (assumes a hypersphere)
 	def angle(self, vec1, vec2):
@@ -111,8 +113,10 @@ class Scholar:
 
 	# Returns the words closest to an untagged word
 	def get_closest_words_untagged(self, word):
-		tag = self.get_most_common_tag(word)
-		return self.get_closest_words(word + '_' + tag)
+		if self.tags:
+			tag = self.get_most_common_tag(word)
+			return self.get_closest_words(word + '_' + tag)
+		return self.get_closest_words(word)
 
 	# Return the analogy results for a list of words (input: "king -man woman")
 	def analogy(self, words_string):
