@@ -32,8 +32,6 @@ s = sch.Scholar(tags=False)
 
 s.get_cosine_similarity('man', 'woman')
 s.analogy('king -man woman')
-s.exists_in_model('peppercorn')
-s.exists_in_model_untagged('dog') # Using an untagged corpus, these methods are identical
 s.get_angle('dog', 'cat')
 dog_vec = s.get_vector('dog')
 s.get_words(dog_vec, 10)
@@ -45,6 +43,7 @@ s.get_most_common_words('VB', 10) # Takes a tag as a parameter
 s.get_most_common_tag('dog')
 s.get_words_by_rarity('the boy walked across the wasteland.')
 s.exists_in_model('dog')
+s.exists_in_model_untagged('dog') # Using an untagged corpus, these methods are identical
 ```
 
 2. The available methods using the full pos-tagged corpus are demonstrated below. Some methods require a pos-tag, and some of them don't.
@@ -59,7 +58,6 @@ s = sch.Scholar()
 
 s.get_cosine_similarity('man_NN', 'woman_NN')
 s.analogy('king_NN -man_NN woman_NN')
-s.exists_in_model('peppercorn_NN')
 s.get_angle('dog_NN', 'cat_NN')
 dog_vec = s.get_vector('dog_NN')
 s.get_words(dog_vec, 10)
@@ -108,7 +106,6 @@ s = sch.Scholar(slim=True)
 
 s.get_cosine_similarity('man_NN', 'woman_NN')
 s.analogy('king_NN -man_NN woman_NN')
-s.exists_in_model('peppercorn_NN')
 s.get_angle('dog_NN', 'cat_NN')
 dog_vec = s.get_vector('dog_NN')
 s.get_words(dog_vec, 10)
@@ -128,6 +125,7 @@ s.get_whole('bread', 10)
 # Miscellaneous
 s.get_most_common_words('VB', 10) # Takes a tag as a parameter
 s.get_most_common_tag('dog') # This method should never be run with a tag
+s.get_words_by_rarity('the boy walked across the wasteland.') # Does not require tag
 s.exists_in_model('dog_NN') # Requires tag
 s.exists_in_model_untagged('dog') # Does not require tag
 ```
