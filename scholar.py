@@ -1,6 +1,6 @@
 import word2vec, sys, os, math
 import numpy as np
-import cPickle as pkl
+import pickle as pkl
 
 ''' Files used by this class:
 		canon_adj.txt		canon_adj_pl.txt
@@ -65,7 +65,6 @@ class Scholar:
 			pieces = line.split('.')
 			word = pieces[0]
 			tags = pieces[1].split('-')
-			tags = map(int, tags)
 			self.word_to_tags[word] = tags
 
 	# Return the cosine similarity of vectors for two specified words

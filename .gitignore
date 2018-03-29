@@ -6,3 +6,5 @@ gensim_tagged
 *.pkl
 *.txt~
 enwiki_dist_parsey.txt
+postag_distributions_for_scholar.txt
+postag_distributions_for_scholar_30kn3kv.txt
