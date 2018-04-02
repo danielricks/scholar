@@ -64,8 +64,9 @@ class Scholar:
 		for line in word_tag_dist.split():
 			pieces = line.split('.')
 			word = pieces[0]
-			tags = pieces[1].split('-')
-			self.word_to_tags[word] = tags
+			tag_counts = pieces[1].split('-')
+			tag_counts_as_ints = [int(tag_count) for tag_count in tag_counts]
+			self.word_to_tags[word] = tag_counts_as_ints
 
 	# Return the cosine similarity of vectors for two specified words
 	def get_cosine_similarity(self, word1, word2):
