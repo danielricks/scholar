@@ -5,7 +5,7 @@ Using linear algebra, we were able to pull affordances (relevant verbs) for noun
 
 ## Requirements
 
-Our processed files are available [here](https://drive.google.com/open?id=1srOUFidQ9fV240wyF7GW4eqF6raCawBV).
+Our processed files are available [here](https://www.dropbox.com/s/k2lxuxormpo63om/scholar_required_files.zip?dl=0).
 
 Provided are several bin files: (1) an untagged copy of Wikipedia from January 2016, (2) a part-of-speech tagged copy of Wikipedia, and (3) a truncated version of 2. Per standard natural language processing, we used [Penn Treebank tags](https://www.ling.upenn.edu/courses/Fall_2003/ling001/penn_treebank_pos.html) to denote parts of speech. We tagged our copy of Wikipedia (using [Parsey McParseface](https://github.com/tensorflow/models/tree/master/syntaxnet)) and used that as input to word2vec.
 
